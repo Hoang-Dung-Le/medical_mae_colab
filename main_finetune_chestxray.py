@@ -25,8 +25,8 @@ import timm
 
 # assert timm.__version__ == "0.3.2" # version check
 from timm.models.layers import trunc_normal_
-# from timm.data.mixup import Mixup
-from util.mixup_multi_label import Mixup
+from timm.data.mixup import Mixup
+# from util.mixup_multi_label import Mixup
 from timm.loss import LabelSmoothingCrossEntropy, SoftTargetCrossEntropy
 from util.multi_label_loss import SoftTargetBinaryCrossEntropy
 
