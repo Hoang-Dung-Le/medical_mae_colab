@@ -186,6 +186,8 @@ def evaluate_chestxray(data_loader, model, device, args):
     model.eval()
     outputs = []
     targets = []
+    tg = True
+    out = True
     for batch in metric_logger.log_every(data_loader, 10, header):
         images = batch[0]
         target = batch[-1]
@@ -196,6 +198,12 @@ def evaluate_chestxray(data_loader, model, device, args):
         with torch.cuda.amp.autocast():
             output = model(images)
             loss = criterion(output, target)
+            if out:
+                print("out: ", output)
+                out = False
+            if tg:
+                print("target: ", target)
+                tg = False
 
 
         if args.dataset == 'covidx':
@@ -256,8 +264,8 @@ def evaluate_chestxray(data_loader, model, device, args):
     print(targets.shape, outputs.shape)
     np.save(args.log_dir + '/' + 'y_gt.npy', targets)
     np.save(args.log_dir + '/' + 'y_pred.npy', outputs)
-    print("target: ", targets)
-    print("outputs: ", outputs)
+    # print("target: ", targets)
+    # print("outputs: ", outputs)
     auc_each_class = computeAUROC(targets, outputs, num_classes)
     auc_each_class_array = np.array(auc_each_class)
     missing_classes_index = np.where(auc_each_class_array == 0)[0]
