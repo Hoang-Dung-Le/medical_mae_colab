@@ -205,7 +205,6 @@ def evaluate_chestxray(data_loader, model, device, args):
         targets.append(target)
         # acc1, acc5 = accuracy(output, target, topk=(1, 5))
         #
-
         metric_logger.update(loss=loss.item())
 
         if args.dataset == 'covidx':
@@ -257,6 +256,8 @@ def evaluate_chestxray(data_loader, model, device, args):
     print(targets.shape, outputs.shape)
     np.save(args.log_dir + '/' + 'y_gt.npy', targets)
     np.save(args.log_dir + '/' + 'y_pred.npy', outputs)
+    print("target: ", targets)
+    print("outputs: ", outputs)
     auc_each_class = computeAUROC(targets, outputs, num_classes)
     auc_each_class_array = np.array(auc_each_class)
     missing_classes_index = np.where(auc_each_class_array == 0)[0]
