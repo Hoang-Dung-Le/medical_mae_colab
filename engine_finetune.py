@@ -26,6 +26,10 @@ import torch.nn.functional as F
 from libauc import losses
 from sklearn.metrics import confusion_matrix
 import copy
+
+tg = True
+out = True
+
 def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
                     data_loader: Iterable, optimizer: torch.optim.Optimizer,
                     device: torch.device, epoch: int, loss_scaler, max_norm: float = 0,
@@ -147,6 +151,9 @@ def computeAUROC(dataGT, dataPRED, classCount):
     # print(dataGT.shape, dataPRED.shape)
     for i in range(classCount):
         try:
+            if out:
+                print("dataGT: ", dataGT)
+                print("datapred: ", dataPRED)
             outAUROC.append(roc_auc_score(dataGT[:, i], dataPRED[:, i]))
         except:
             outAUROC.append(0.)
@@ -188,15 +195,14 @@ def evaluate_chestxray(data_loader, model, device, args):
     model.eval()
     outputs = []
     targets = []
-    tg = True
-    out = True
+
     for batch in metric_logger.log_every(data_loader, 10, header):
         images = batch[0]
         target = batch[-1]
         images = images.to(device, non_blocking=True)
         target = target.to(device, non_blocking=True)
-        from collections import Counter
-        print("label: ", Counter(target) )
+        # from collections import Counter
+        # print("label: ", Counter(target) )
         # compute output
         with torch.cuda.amp.autocast():
             output = model(images)
