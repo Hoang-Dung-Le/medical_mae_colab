@@ -98,6 +98,8 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
             epoch_1000x = int((data_iter_step / len(data_loader) + epoch) * 1000)
             log_writer.add_scalar('loss', loss_value_reduce, epoch_1000x)
             log_writer.add_scalar('lr', max_lr, epoch_1000x)
+        
+        break
 
     # gather the stats from all processes
     metric_logger.synchronize_between_processes()
@@ -148,7 +150,7 @@ def computeAUROC(dataGT, dataPRED, classCount):
             outAUROC.append(roc_auc_score(dataGT[:, i], dataPRED[:, i]))
         except:
             outAUROC.append(0.)
-    print(outAUROC)
+    print("AUC: ", outAUROC)
     return outAUROC
 
 
