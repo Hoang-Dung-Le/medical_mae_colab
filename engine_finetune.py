@@ -27,9 +27,6 @@ from libauc import losses
 from sklearn.metrics import confusion_matrix
 import copy
 
-global tg
-global out
-
 def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
                     data_loader: Iterable, optimizer: torch.optim.Optimizer,
                     device: torch.device, epoch: int, loss_scaler, max_norm: float = 0,
@@ -151,9 +148,9 @@ def computeAUROC(dataGT, dataPRED, classCount):
     # print(dataGT.shape, dataPRED.shape)
     for i in range(classCount):
         try:
-            if out:
-                print("dataGT: ", dataGT)
-                print("datapred: ", dataPRED)
+    
+            print("dataGT: ", dataGT)
+            print("datapred: ", dataPRED)
             outAUROC.append(roc_auc_score(dataGT[:, i], dataPRED[:, i]))
         except:
             outAUROC.append(0.)
@@ -209,12 +206,12 @@ def evaluate_chestxray(data_loader, model, device, args):
         with torch.cuda.amp.autocast():
             output = model(images)
             loss = criterion(output, target)
-            if out:
-                print("out: ", output)
-                out = False
-            if tg:
-                print("target: ", target)
-                tg = False
+            # if out:
+            #     print("out: ", output)
+            #     out = False
+            # if tg:
+            #     print("target: ", target)
+            #     tg = False
 
 
         if args.dataset == 'covidx':
