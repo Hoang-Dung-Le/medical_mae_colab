@@ -27,8 +27,8 @@ from libauc import losses
 from sklearn.metrics import confusion_matrix
 import copy
 
-tg = True
-out = True
+global tg
+global out
 
 def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
                     data_loader: Iterable, optimizer: torch.optim.Optimizer,
@@ -195,6 +195,8 @@ def evaluate_chestxray(data_loader, model, device, args):
     model.eval()
     outputs = []
     targets = []
+    out = True
+    tg = True
 
     for batch in metric_logger.log_every(data_loader, 10, header):
         images = batch[0]
