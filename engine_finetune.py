@@ -195,7 +195,8 @@ def evaluate_chestxray(data_loader, model, device, args):
         target = batch[-1]
         images = images.to(device, non_blocking=True)
         target = target.to(device, non_blocking=True)
-
+        from collections import Counter
+        print("label: ", Counter(target) )
         # compute output
         with torch.cuda.amp.autocast():
             output = model(images)
